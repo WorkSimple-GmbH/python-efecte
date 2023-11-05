@@ -94,6 +94,7 @@ class EfecteClient:
         return self._get_request("echo/jwt", payload)
 
     def get_templates(self):
+        self._ensure_login()
         r = self._get_request("dc", None)
         if r.ok:
             return r.json()
@@ -101,6 +102,7 @@ class EfecteClient:
             raise Exception("efecte returned error: {}".format(r.content))
 
     def get_template(self, template_code: str) -> object:
+        self._ensure_login()
         r = self._get_request("dc/{}".format(template_code))
         if r.ok:
             return r.json()
@@ -109,6 +111,7 @@ class EfecteClient:
 
     def get_datacards(self, template_code: str, filter=None, data_cards=False,
                       selected_attributes="", limit=50) -> object:
+        self._ensure_login()
         params = {
             "filter": filter,
             "dataCards": data_cards,
@@ -123,6 +126,7 @@ class EfecteClient:
         while "links" in data["meta"] and "next" in data["meta"]["links"] and data["meta"]["links"]["next"] != "":
             if limit is not None and len(result) > limit:
                 return result[:limit]
+            self._ensure_login()
             r = self._get_request(data["meta"]["links"]["next"], full_url=True, params=params)
             if not r.ok:
                 raise Exception("efecte returned error: {}".format(r.content))
@@ -132,6 +136,7 @@ class EfecteClient:
         return result
 
     def create_datacard(self, template_code: str, folder_code: str, data: dict):
+        self._ensure_login()
         params = {
             'folderCode': folder_code,
             'data': data
@@ -145,6 +150,7 @@ class EfecteClient:
         return None
 
     def update_datacard(self, template_code: str, folder_code: str, datacard_id: str, data: dict):
+        self._ensure_login()
         params = {
             'folderCode': folder_code,
             'dataCardId': datacard_id,
