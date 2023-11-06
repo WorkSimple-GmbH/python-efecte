@@ -110,7 +110,7 @@ class EfecteClient:
             raise Exception("efecte returned error: {}".format(r.content))
 
     def get_datacards(self, template_code: str, filter=None, data_cards=False,
-                      selected_attributes="", limit=50) -> object:
+                      selected_attributes="", limit=50) -> [object]:
         self._ensure_login()
         params = {
             "filter": filter,
