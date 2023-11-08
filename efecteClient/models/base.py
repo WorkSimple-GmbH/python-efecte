@@ -6,6 +6,21 @@ from enum import Enum
 
 class EfecteBaseModel:
 
+    created: datetime
+    "Created"
+
+    updated: datetime
+    "Updated"
+
+    creator: object
+    "Creator"
+
+    last_update_by: object
+    "Last update by"
+
+    current_viewer: object
+    "Datacard viewer"
+
     template_code: str = ""
     "Efecte Tepmlate Code for Subclasses"
 
@@ -18,18 +33,22 @@ class EfecteBaseModel:
     hidden: bool = False
     "Item is hidden"
 
-    def __init__(self, data=None):
+    def __init__(self, json_data=None):
         # Local Module imports
+        if json_data is None:
+            return
         from .company import (EfecteCompany, EfecteCompanyTypeEnum, EfecteCompanyStatusEnum,
                               EfecteOrganizationInternalExternalEnum, EfecteWebsite)
-        if self.template_code != data['templateCode']:
-            raise Exception("Expected templateCode [{}] got [{}] from Efecte".format(self.template_code, data['templateCode']))
-        if data is None:
+        if 'templateCode' not in json_data:
+            raise Exception("Expected templateCode but missing from data structure")
+        if self.template_code != json_data['templateCode']:
+            raise Exception("Expected templateCode [{}] got [{}] from Efecte".format(self.template_code, json_data['templateCode']))
+        if json_data is None:
             return
-        self.dataCardId = data['dataCardId']
-        self.folderName = data['folderName']
-        if 'data' in data:
-            for key, element in data['data'].items():
+        self.dataCardId = json_data['dataCardId']
+        self.folderName = json_data['folderName']
+        if 'data' in json_data:
+            for key, element in json_data['data'].items():
                 if hasattr(self, key):
                     attr_type = self.__annotations__[key]
                     element_type = element['type']

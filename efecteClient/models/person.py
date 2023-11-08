@@ -261,14 +261,3 @@ class EfectePerson(EfecteBaseModel):
     efecte_id: str = None
     "Efecte ID"
 
-    created: datetime = None
-    "Created"
-
-    updated: datetime = None
-    "Updated"
-
-    creator: object = None
-    "Creator"
-
-    last_update_by: object = None
-    "Last update by"
