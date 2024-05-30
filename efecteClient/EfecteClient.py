@@ -118,17 +118,20 @@ class EfecteClient:
             "selectedAttributes": selected_attributes
         }
         r = self._get_request("dc/{}/data".format(template_code), params=params)
+        if r.status_code == 404:
+            return list()
         if not r.ok:
             raise Exception("efecte returned error: {}".format(r.content))
         result = list()
         data = r.json()
         result.extend(data["data"])
-        while "links" in data["meta"] and "next" in data["meta"]["links"] and data["meta"]["links"]["next"] != "":
+        while ("meta" in data and "links" in data["meta"] and
+               "next" in data["meta"]["links"] and data["meta"]["links"]["next"] != ""):
             if limit is not None and len(result) > limit:
                 return result[:limit]
             self._ensure_login()
             r = self._get_request(data["meta"]["links"]["next"], full_url=True, params=params)
-            if not r.ok:
+            if not r.ok and r.status_code != 404:
                 raise Exception("efecte returned error: {}".format(r.content))
             data = r.json()
             if "data" in data:
@@ -160,3 +163,14 @@ class EfecteClient:
         if not r.ok:
             raise Exception("efecte returned error: {}".format(r.content))
         return True
+
+    def get_file(self, template_code: str, datacard_id: str, attribute_code: str, location_ref: str) -> bytes:
+        self._ensure_login()
+        url = 'dc/{}/data/{}/{}/file/{}'.format(
+            template_code, datacard_id, attribute_code, location_ref
+        )
+        r = self._get_request(path=url)
+        if r.ok:
+            return r.content
+        else:
+            raise Exception("efecte returned error: {}".format(r.content))

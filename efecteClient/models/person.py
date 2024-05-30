@@ -249,7 +249,7 @@ class EfectePerson(EfecteBaseModel):
     emai_notification: EfectePersonEmailNotificationEnum = None
     "Email notifications"
 
-    efecte_user: object = None
+    efecte_user: EfecteBaseModel = None
     "Efecte user"
 
     person_site_ess: str = None
@@ -257,6 +257,9 @@ class EfectePerson(EfecteBaseModel):
 
     additional_information: str = None
     "Additional information"
+
+    position: str = None
+    "Position/Function"
 
     efecte_id: str = None
     "Efecte ID"

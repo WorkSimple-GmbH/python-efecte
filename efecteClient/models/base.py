@@ -114,6 +114,11 @@ class EfecteBaseModel:
                     result[key]['values'].append({'value': value.isoformat()})
                 else:
                     result[key]['values'].append({'value': value})
+            elif issubclass(attr_type, EfecteBaseModel):
+                result[key] = dict()
+                result[key]['type'] = 'reference'
+                result[key]['values'] = list()
+                result[key]['values'].append({'dataCardId': value.dataCardId})
             else:
                 raise NotImplementedError("Serialization of {} not implemented".format(attr_type))
         return result

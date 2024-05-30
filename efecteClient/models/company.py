@@ -87,7 +87,7 @@ class EfecteCompany(EfecteBaseModel):
     city: str = None
     "City"
 
-    country: object = None
+    country: EfecteBaseModel = None
     "Country"
 
     phone: str = None
