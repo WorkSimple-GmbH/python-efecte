@@ -37,8 +37,7 @@ class EfecteBaseModel:
         # Local Module imports
         if json_data is None:
             return
-        from .company import (EfecteCompany, EfecteCompanyTypeEnum, EfecteCompanyStatusEnum,
-                              EfecteOrganizationInternalExternalEnum, EfecteWebsite)
+        from .company import EfecteWebsite
         if 'templateCode' not in json_data:
             raise Exception("Expected templateCode but missing from data structure")
         if self.template_code != json_data['templateCode']:
@@ -61,18 +60,10 @@ class EfecteBaseModel:
                             if element_type != 'date':
                                 raise TypeError("Expected date and got {}".format(element_type))
                             setattr(self, key, parser.parse(values[0]['value']))
-                        elif attr_type == EfecteCompanyStatusEnum:
+                        elif issubclass(attr_type, Enum):
                             if element_type != 'static-value':
                                 raise TypeError("Expected static-value and got {}".format(element_type))
-                            setattr(self, key, EfecteCompanyStatusEnum(values[0]['value']))
-                        elif attr_type == EfecteCompanyTypeEnum:
-                            if element_type != 'static-value':
-                                raise TypeError("Expected static-value and got {}".format(element_type))
-                            setattr(self, key, EfecteCompanyTypeEnum(values[0]['value']))
-                        elif attr_type == EfecteOrganizationInternalExternalEnum:
-                            if element_type != 'static-value':
-                                raise TypeError("Expected static-value and got {}".format(element_type))
-                            setattr(self, key, EfecteOrganizationInternalExternalEnum(values[0]['value']))
+                            setattr(self, key, attr_type(values[0]['value']))
                         elif attr_type == [EfecteWebsite]:
                             setattr(self, key, EfecteWebsite(values[0]['location'], values[0]['name']))
                         else:
