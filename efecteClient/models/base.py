@@ -60,7 +60,7 @@ class EfecteBaseModel:
                             if element_type != 'date':
                                 raise TypeError("Expected date and got {}".format(element_type))
                             setattr(self, key, parser.parse(values[0]['value']))
-                        elif issubclass(attr_type, Enum):
+                        elif isinstance(attr_type, type) and issubclass(attr_type, Enum):
                             if element_type != 'static-value':
                                 raise TypeError("Expected static-value and got {}".format(element_type))
                             setattr(self, key, attr_type(values[0]['value']))
@@ -93,10 +93,10 @@ class EfecteBaseModel:
                 pass
             elif attr_type is typing.List[str]:
                 pass
-            elif issubclass(attr_type, Enum) or attr_type in (str, int, datetime):
+            elif (isinstance(attr_type, type) and issubclass(attr_type, Enum)) or attr_type in (str, int, datetime):
                 result[key] = dict()
                 result[key]['values'] = list()
-                if issubclass(attr_type, Enum):
+                if isinstance(attr_type, type) and issubclass(attr_type, Enum):
                     if type(value) is str:
                         result[key]['values'].append({'value': value})
                     else:
@@ -105,7 +105,7 @@ class EfecteBaseModel:
                     result[key]['values'].append({'value': value.isoformat()})
                 else:
                     result[key]['values'].append({'value': value})
-            elif issubclass(attr_type, EfecteBaseModel):
+            elif isinstance(attr_type, type) and issubclass(attr_type, EfecteBaseModel):
                 result[key] = dict()
                 result[key]['type'] = 'reference'
                 result[key]['values'] = list()
