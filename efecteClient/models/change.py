@@ -89,6 +89,21 @@ class EfecteChange(EfecteBaseModel):
     folderName: str = None
     "Storage Folder Name"
 
+    def __init__(self, json_data=None):
+        super().__init__(json_data)
+        if json_data is None:
+            return
+        # EfecteBaseModel.__init__ does not parse reference fields into model
+        # objects (it only handles 'value' keys, not 'dataCardId'). We handle
+        # the company reference manually here.
+        data = json_data.get('data', {})
+        company_data = data.get('company', {})
+        values = company_data.get('values', [])
+        if values and 'dataCardId' in values[0]:
+            comp = EfecteCompany()
+            comp.dataCardId = values[0]['dataCardId']
+            self.company = comp
+
     # Identification
     name: str = None
     "Change primary ID"
@@ -121,6 +136,9 @@ class EfecteChange(EfecteBaseModel):
 
     odoo_sale_order_link: str = None
     "Odoo Sale Order Link"
+
+    odoo_sale_order_status: str = None
+    "Odoo Sale Order Status"
 
     # Person references
     customer: EfectePerson = None
