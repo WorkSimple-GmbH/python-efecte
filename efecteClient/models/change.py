@@ -98,18 +98,19 @@ class EfecteChange(EfecteBaseModel):
         # the company reference manually here.
         data = json_data.get('data', {})
         company_data = data.get('company', {})
-        values = company_data.get('values', [])
-        if values and 'dataCardId' in values[0]:
+        company_values = company_data.get('values', [])
+        if company_values and 'dataCardId' in company_values[0]:
             comp = EfecteCompany()
-            comp.dataCardId = values[0]['dataCardId']
+            comp.dataCardId = company_values[0]['dataCardId']
             self.company = comp
 
         customer_data = data.get('customer', {})
-        values = customer_data.get('values', [])
-        if values and 'dataCardId' in values[0]:
-            comp = EfectePerson()
-            comp.dataCardId = values[0]['dataCardId']
-            self.company = comp
+        customer_values = customer_data.get('values', [])
+        if customer_values and 'dataCardId' in customer_values[0]:
+            person = EfectePerson()
+            person.dataCardId = customer_values[0]['dataCardId']
+            self.customer = person
+
     # Identification
     name: str = None
     "Change primary ID"
