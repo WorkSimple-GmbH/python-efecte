@@ -97,6 +97,7 @@ class EfecteChange(EfecteBaseModel):
         # objects (it only handles 'value' keys, not 'dataCardId'). We handle
         # company and customer references manually here.
         data = json_data.get('data', {})
+
         company_data = data.get('company', {})
         company_values = company_data.get('values', [])
         if company_values and 'dataCardId' in company_values[0]:
