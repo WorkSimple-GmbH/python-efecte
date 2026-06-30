@@ -95,7 +95,7 @@ class EfecteChange(EfecteBaseModel):
             return
         # EfecteBaseModel.__init__ does not parse reference fields into model
         # objects (it only handles 'value' keys, not 'dataCardId'). We handle
-        # the company reference manually here.
+        # company and customer references manually here.
         data = json_data.get('data', {})
         company_data = data.get('company', {})
         company_values = company_data.get('values', [])
