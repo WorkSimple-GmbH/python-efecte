@@ -104,6 +104,12 @@ class EfecteChange(EfecteBaseModel):
             comp.dataCardId = values[0]['dataCardId']
             self.company = comp
 
+        customer_data = data.get('customer', {})
+        values = customer_data.get('values', [])
+        if values and 'dataCardId' in values[0]:
+            comp = EfectePerson()
+            comp.dataCardId = values[0]['dataCardId']
+            self.company = comp
     # Identification
     name: str = None
     "Change primary ID"
