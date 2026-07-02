@@ -50,15 +50,24 @@ class EfecteStandardChange(EfecteBaseModel):
             return
         # EfecteBaseModel.__init__ does not parse reference fields into model
         # objects (it only handles 'value' keys, not 'dataCardId'). We handle
-        # the company reference manually here.
+        # the company and requester reference fields manually here.
         # Note: Standard Change uses 'schg_company' instead of 'company'.
         data = json_data.get('data', {})
+
         company_data = data.get('schg_company', {})
-        values = company_data.get('values', [])
-        if values and 'dataCardId' in values[0]:
+        company_values = company_data.get('values', [])
+        if company_values and 'dataCardId' in company_values[0]:
             comp = EfecteCompany()
-            comp.dataCardId = values[0]['dataCardId']
+            comp.dataCardId = company_values[0]['dataCardId']
             self.schg_company = comp
+
+        requester_data = data.get('requester', {})
+        requester_values = requester_data.get('values', [])
+        if requester_values and 'dataCardId' in requester_values[0]:
+            person = EfectePerson()
+            person.dataCardId = requester_values[0]['dataCardId']
+            person.name = requester_values[0].get('name')
+            self.requester = person
 
     # Identification
     name: str = None
