@@ -146,6 +146,9 @@ class EfecteStandardChange(EfecteBaseModel):
     "Cost estimate"
 
     # Planning
+    work_estimate: int = None
+    "Work estimate"
+
     implementation_plan: str = None
     "Implementation plan"
 
