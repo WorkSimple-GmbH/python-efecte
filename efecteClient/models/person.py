@@ -42,6 +42,13 @@ class EfectePersonStatusEnum(Enum):
     Manually_locked = 'Manually locked'
 
 
+class EfectePersonHoustonPublicRepresentationEnum(Enum):
+    name = 'Full Name'
+    name_company = 'Full Name & Company'
+    pseudonym = 'Pseudonym'
+    pseudonym_company = 'Pseudonym & Company'
+
+
 class EfectePersonEmailNotificationEnum(Enum):
     No = 'No'
 
@@ -101,6 +108,10 @@ class EfectePerson(EfecteBaseModel):
 
     ess_info: str = None
     "ESS info"
+
+    # Houston Profile
+    houston_public_representation: EfectePersonHoustonPublicRepresentationEnum = None
+    "Public Representation"
 
     employee_nature: EfectePersonEmployeeNatureEnum = None
     "Employment nature"
